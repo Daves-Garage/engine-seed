@@ -7,14 +7,14 @@ import akka.actor.{ActorLogging, ActorRefFactory, Props}
 import akka.util.{ByteString}
 import akka.stream.actor.{ActorPublisher, ActorPublisherMessage}
 import akka.http.model.HttpEntity
-import org.reactivestreams.ActorPublisher
+import org.reactivestreams.Publisher
  
 import ActorPublisherMessage._
 import HttpEntity._
 
 
 object RandomDataPublisher {
-  def apply()(implicit arf: ActorRefFactory): Publisher[ChunkStrreamPart] = {
+  def apply()(implicit arf: ActorRefFactory): Publisher[ChunkStreamPart] = {
     ActorPublisher[ChunkStrreamPart](arf.actorOf(Props[RandomDataPublisher]))
     }
 }

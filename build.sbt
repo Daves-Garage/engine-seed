@@ -20,10 +20,10 @@ libraryDependencies ++= {
 }
 
 
-resolvers += "Sonotype Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots/"
+resolvers += Classpaths.typesafeResolver
 
-resolvers += "TypeSafe" at "https://repo.typesafe.com/typesafe/releases/"
-
+maxErrors := 5
+triggeredMessage := Watched.clearWhenTriggered
 
 
 

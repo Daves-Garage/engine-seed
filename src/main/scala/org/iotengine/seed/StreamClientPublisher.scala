@@ -6,15 +6,16 @@ import scals.async.Async.{async, await}
 
 import akka.util.{ByteString}
 import akka.actor.{ActorSystem, ActorLogging, Props}
+import akka.stream.{ActorFlowMaterializer}
 import akka.stream.actor._
 import akka.http.model.HttpEntity
-import akka.reactivestreams.Publisher
+import org.reactivestreams.Publisher
 
 import HttpEntity._
 
 object StreamClientPublisher {
 
-  def apply(port: Int)(implicit system: ActorSystem, materializer: FlowMaterializer): Publisher[ChunkStreamPart] = {
+  def apply(port: Int)(implicit system: ActorSystem, materializer:  ActorFlowMaterializer): Publisher[ChunkStreamPart] = {
     implicit val ex = system.dispatcher
     val publisherFuture = async {
       val response = await(HttpClient.makeRequest(port, "/"))
