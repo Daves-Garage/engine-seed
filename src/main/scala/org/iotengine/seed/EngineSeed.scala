@@ -5,7 +5,7 @@ import akka.http.Http
 import akka.util.ByteString
 import akka.actor.{ActorSystem, ActorRefFactory}
 import akka.stream.actor.{ActorPublisher}
-import akka.stream.{ActorFlowMaterializerSettings, ActorFlowMaterializer}
+import akka.stream.{ActorMaterializerSettings, ActorFlowMaterializer}
 import akka.http.model._
 import com.typesafe.config._
 import org.reactivestreams.{Publisher, Subscriber}
@@ -22,7 +22,7 @@ object Main extends App {
 
   val publisher: Publisher[ChunkStreamPart] = config.getString("example.publisher") match {
     case "random" => RandomDataPublisher()
-    case "client" => StreamClientPublisher(config.getInt("example.client.port"))
+ //   case "client" => StreamClientPublisher(config.getInt("example.client.port"))
   }
 
   config.getString("example.subscriber") match {
@@ -34,11 +34,11 @@ object Main extends App {
 object MainFunctions {
 
   def startStreamsServerWithPublisher(publisher: Publisher[ChunkStreamPart], port: Int)
-        (implicit system: ActorSystem, materializer: ActorFlowMaterializer) = { 
+        (implicit system: ActorSystem, materializer: FlowMaterializer) = { 
 
           HttpServer.bindServer(port) {
             case HttpRequest(GET, Uri.Path("/"), _, _, _) => 
-              HttpResponse (entity = new Chunked(MediaTypes.`text/plain`, publisher))
+              HttpResponse (entity = HttpEntityChunked.createChunked(MediaTypes.`text/plain`, publisher))
             case _: HttpRequest => HttpResponse(404, entity = "Uknown resource!")
           }
   }
