@@ -4,7 +4,7 @@ import akka.util.ByteString
 import akka.actor.{ActorLogging, ActorRefFactory,Props}
 import akka.stream.actor.{ActorSubscriber, ActorSubscriberMessage, WatermarkRequestStrategy}
 import akka.http.model.HttpEntity
-import org.reactivestreams.ActorSubscriber
+import org.reactivestreams.Subscriber
 
 import HttpEntity._
 

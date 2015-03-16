@@ -15,11 +15,11 @@ import HttpEntity._
 
 object RandomDataPublisher {
   def apply()(implicit arf: ActorRefFactory): Publisher[ChunkStreamPart] = {
-    ActorPublisher[ChunkStrreamPart](arf.actorOf(Props[RandomDataPublisher]))
+    ActorPublisher[ChunkStreamPart](arf.actorOf(Props[RandomDataPublisher]))
     }
 }
 
-class RandomDataPublisher extends ActorPublisher[ChunkStrreamPart] with ActorLogging {
+class RandomDataPublisher extends ActorPublisher[ChunkStreamPart] with ActorLogging  {
   implicit val ec = context.dispatcher
   var count = 0
   val random = new Random()

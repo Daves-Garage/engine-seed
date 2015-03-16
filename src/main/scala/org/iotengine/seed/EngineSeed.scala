@@ -5,8 +5,9 @@ import akka.http.Http
 import akka.util.ByteString
 import akka.actor.{ActorSystem, ActorRefFactory}
 import akka.stream.actor.{ActorPublisher}
-import akka.stream.{ActorMaterializerSettings, ActorFlowMaterializer}
+import akka.stream.{ActorFlowMaterializerSettings, ActorFlowMaterializer}
 import akka.http.model._
+import akka.stream.scaladsl.{Source}
 import com.typesafe.config._
 import org.reactivestreams.{Publisher, Subscriber}
 
@@ -33,12 +34,13 @@ object Main extends App {
 
 object MainFunctions {
 
-  def startStreamsServerWithPublisher(publisher: Publisher[ChunkStreamPart], port: Int)
-        (implicit system: ActorSystem, materializer: FlowMaterializer) = { 
+  def startStreamsServerWithPublisher(publisher:  Publisher[ChunkStreamPart], port: Int)
+        (implicit system: ActorSystem, materializer: ActorFlowMaterializer) = { 
 
           HttpServer.bindServer(port) {
             case HttpRequest(GET, Uri.Path("/"), _, _, _) => 
-              HttpResponse (entity = HttpEntityChunked.createChunked(MediaTypes.`text/plain`, publisher))
+              HttpResponse (entity = Chunked(MediaTypes.`text/plain`, Source(publisher)))
+
             case _: HttpRequest => HttpResponse(404, entity = "Uknown resource!")
           }
   }
